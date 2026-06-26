@@ -1,6 +1,12 @@
 # comtrade-reconcile
 
-**A BACI-faithful reconciliation of UN Comtrade — and a nowcast for the years BACI hasn't released yet.**
+**A share-faithful reconstruction of bilateral trade from raw UN Comtrade (BACI-style) — and a nowcast
+for the years BACI hasn't released yet.**
+
+> Scope claim, stated precisely: this reproduces BACI's **shares, ranks and concentration** (validated
+> below), *not* its exact levels — current Comtrade runs ~1.5–1.8× above BACI's published values (see
+> "the level offset", diagnosed). It is Comtrade-mirror reconciliation in BACI's spirit, not a bit-for-bit
+> BACI replica.
 
 CEPII's [BACI](http://www.cepii.fr/CEPII/en/bdd_modele/bdd_modele_item.asp?id=37) is the standard
 "clean" bilateral trade dataset, but it lags ~1.5 years. This is a small, self-contained pipeline that

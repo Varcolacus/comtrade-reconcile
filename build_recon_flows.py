@@ -6,7 +6,7 @@ Marks the output provisional. Usage: python build_recon_flows.py 2025
 """
 import sys, json
 import pandas as pd, numpy as np
-ROOT = ros.environ.get('ATLAS_ROOT', '.')
+ROOT = os.environ.get('ATLAS_ROOT', '.')
 YEAR = int(sys.argv[1]); TOP = 6
 
 d = json.load(open(ROOT + r'\out\data.json', encoding='utf8'))

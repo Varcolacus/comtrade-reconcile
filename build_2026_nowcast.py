@@ -6,7 +6,7 @@ Output: out/flows_2026.json (provisional, year-to-date momentum).
 """
 import os, sys, time, json
 import requests, pandas as pd, numpy as np
-ROOT = ros.environ.get('ATLAS_ROOT', '.')
+ROOT = os.environ.get('ATLAS_ROOT', '.')
 KEY = os.environ.get('COMTRADE_KEY', '')
 if not KEY: sys.exit('set COMTRADE_KEY')
 

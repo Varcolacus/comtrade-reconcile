@@ -6,7 +6,7 @@ Usage:  COMTRADE_KEY=xxx python pull_comtrade.py 2024 2025
 import os, sys, time, json, csv, requests
 
 KEY  = os.environ.get('COMTRADE_KEY', '')
-ROOT = ros.environ.get('ATLAS_ROOT', '.')
+ROOT = os.environ.get('ATLAS_ROOT', '.')
 YEARS = [int(y) for y in (sys.argv[1:] or ['2024'])]
 if not KEY:
     sys.exit('set COMTRADE_KEY')

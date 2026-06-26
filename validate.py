@@ -7,7 +7,7 @@ ratio (the known ~1.6x offset, kept visible). Usage: python validate.py 2024
 import sys, json
 sys.stdout.reconfigure(encoding='utf-8')
 import numpy as np, pandas as pd
-ROOT = ros.environ.get('ATLAS_ROOT', '.')
+ROOT = os.environ.get('ATLAS_ROOT', '.')
 YEAR = int(sys.argv[1]) if len(sys.argv) > 1 else 2024
 
 recon = pd.read_csv(ROOT + rf'\reconcile\recon_{YEAR}.csv', dtype={'cmd': str})

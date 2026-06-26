@@ -14,7 +14,7 @@ import os, sys
 import numpy as np, pandas as pd
 import statsmodels.formula.api as smf
 
-ROOT = ros.environ.get('ATLAS_ROOT', '.')
+ROOT = os.environ.get('ATLAS_ROOT', '.')
 YEAR = int(sys.argv[1]) if len(sys.argv) > 1 else 2024
 
 # ---- country crosswalk: Comtrade M49 -> ISO3 (BACI table) ----
