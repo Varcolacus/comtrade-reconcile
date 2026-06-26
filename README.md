@@ -94,6 +94,26 @@ python validate.py 2024                                # vs BACI (results/ has s
 ```
 `COMTRADE_KEY` is read from the environment — never hardcode or commit it.
 
+## Out-of-sample evaluation & pre-registration
+
+Validation against BACI 2024 shows the reconciliation *reconstructs* a known year well. But the live
+**2025\*/2026\*\*** figures are *forecasts*, and they rest on one assumption: that holding last year's
+exporter shares is a good predictor of this year's. `backtest.py` tests exactly that on the measured
+2018–2024 series (treat year T-1's shares as the nowcast for T, score vs realised T):
+
+```bash
+python backtest.py        # reads ../out/flows_YYYY.json; writes results/backtest.json
+```
+
+Result over 192 material-years: **85% year-over-year top-exporter persistence**, share MAE 0.37pp across
+all exporters, and a lead exporter's annual share move of **P50 3.5pp / P90 8.7pp** — the empirical
+**uncertainty band** for the nowcast. Most predictable: magnets, coking coal, manganese, niobium; least:
+arsenic, beryllium, hafnium, gallium, germanium, fluorspar (thin or non-reporting-producer markets).
+
+[`PREREGISTRATION.md`](PREREGISTRATION.md) then locks, **before BACI 2025 exists**, how the frozen
+`flows_2025.json` nowcast will be scored when it does (`python validate.py 2025`), with numeric
+thresholds — so the test is genuinely out-of-sample and the result will be published pass or fail.
+
 ## Inputs (all public)
 UN Comtrade API · CEPII `dist_cepii` (gravity: distance, contiguity) · CEPII BACI `country_codes`
 (M49 ↔ ISO) · World Bank [Pink Sheet](https://www.worldbank.org/en/research/commodity-markets)
