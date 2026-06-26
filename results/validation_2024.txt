@@ -1,0 +1,42 @@
+VALIDATION 2024 — our reconciliation vs official CEPII BACI
+
+  flow-level log-value correlation : 0.975  (21691 overlapping flows)
+  median level ratio (ours/BACI)   : 1.79  (known offset — shares unaffected)
+
+material              top1   top3  shareMAE  HHI_ours  HHI_BACI
+graphite                 —    3/3      6.7%     0.142     0.214
+phosphate                —    3/3      4.0%     0.158     0.154
+baryte                   Y    2/3      3.8%     0.090     0.111
+boron                    Y    3/3      2.8%     0.473     0.384
+feldspar                 Y    3/3      3.4%     0.317     0.212
+fluorspar                —    2/3      9.0%     0.245     0.251
+manganese                Y    3/3      4.2%     0.439     0.329
+bauxite                  Y    2/3      2.1%     0.447     0.548
+cokingcoal               Y    3/3      2.6%     0.207     0.218
+helium                   Y    3/3      2.8%     0.168     0.161
+silicon                  Y    3/3      3.5%     0.143     0.200
+phosphorus               Y    3/3      1.1%     0.367     0.355
+arsenic                  —    3/3      4.5%     0.183     0.181
+cobalt                   Y    3/3      5.2%     0.221     0.170
+lithium                  Y    2/3      1.9%     0.497     0.587
+strontium                Y    2/3      3.4%     0.428     0.436
+platinum                 Y    3/3      1.4%     0.180     0.164
+palladium                Y    3/3      2.6%     0.176     0.140
+vanadium                 Y    2/3      4.7%     0.159     0.128
+niobium                  Y    3/3      2.2%     0.543     0.590
+copper                   Y    3/3      2.0%     0.077     0.106
+nickel                   Y    2/3      2.3%     0.105     0.091
+tungsten                 Y    2/3      4.7%     0.276     0.400
+tantalum                 —    3/3      3.5%     0.140     0.161
+magnesium                Y    3/3      1.9%     0.484     0.537
+titanium                 Y    2/3      4.3%     0.130     0.183
+antimony                 Y    2/3      2.7%     0.195     0.169
+beryllium                Y    2/3      5.5%     0.529     0.799
+germanium/gallium/ha     Y    2/3      2.9%     0.126     0.139
+magnets                  Y    2/3      2.3%     0.380     0.410
+
+SUMMARY (30 materials):
+  top-1 exporter match : 25/30
+  top-3 overlap (mean) : 2.57 / 3
+  exporter-share MAE   : 3.5%   (median 3.2%)
+  HHI correlation      : 0.920   (concentration reproduced)
