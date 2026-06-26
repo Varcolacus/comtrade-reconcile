@@ -1,5 +1,7 @@
 # comtrade-reconcile
 
+[![validate](https://github.com/Varcolacus/comtrade-reconcile/actions/workflows/validate.yml/badge.svg)](https://github.com/Varcolacus/comtrade-reconcile/actions/workflows/validate.yml)
+
 **A share-faithful reconstruction of bilateral trade from raw UN Comtrade (BACI-style) — and a nowcast
 for the years BACI hasn't released yet.**
 
@@ -40,26 +42,28 @@ reporting. A single reconciled value has to be recovered from these noisy double
 ## Validation against official BACI (`validate.py`)
 Validated on **what matters downstream — shares and concentration**, not just a global correlation:
 
+Validated on **both sides** (exporter and importer), since the atlas shows both.
+
 **2024** (the newest, still-settling BACI year):
 
-| metric | result |
-|---|---|
-| top-1 exporter match | **25 / 30** materials |
-| top-3 exporter overlap (mean) | **2.57 / 3** |
-| exporter-**share** MAE | **3.5%** (median 3.2%) |
-| HHI (concentration) correlation | **0.92** |
-| flow-level log-value correlation | 0.975 (21.7k flows) |
-| level ratio (ours / BACI) | ~1.8× — see below |
+| metric | exporter | importer |
+|---|---|---|
+| top-1 match | **25 / 30** | **22 / 30** |
+| top-3 overlap (mean) | 2.57 / 3 | 2.27 / 3 |
+| share MAE | **3.5%** (med 3.2%) | 4.2% (med 4.1%) |
+| HHI correlation | 0.92 | 0.97 |
+
+Flow-level log-value correlation 0.975 (21.7k flows); level ratio ~1.8× (disclosed offset, below).
 
 **2022** (a fully settled year):
 
-| metric | result |
-|---|---|
-| top-1 exporter match | **22 / 30** materials |
-| top-3 exporter overlap (mean) | **2.43 / 3** |
-| exporter-**share** MAE | **3.9%** (median 4.0%) |
-| HHI correlation | **0.885** |
-| level ratio (ours / BACI) | ~1.5× |
+| metric | exporter | importer |
+|---|---|---|
+| top-1 match | 22 / 30 | 21 / 30 |
+| share MAE | 3.9% | 4.5% |
+| HHI correlation | 0.885 | 0.907 |
+
+Level ratio ~1.5×.
 
 ### The level offset — diagnosed honestly
 Our reconciled totals run **~1.8× BACI for 2024 and ~1.5× for the settled year 2022**. A flow-level
