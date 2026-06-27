@@ -101,6 +101,12 @@ ATLAS_ROOT=fixtures python validate.py 2024   # reconciliation vs official BACI 
 python backtest.py                            # out-of-sample persistence bands (reads fixtures/out)
 python findings.py                            # the origin-gap finding → results/findings.json
 ```
+On **Windows PowerShell** set the env var separately:
+```powershell
+pip install -r requirements.txt
+$env:ATLAS_ROOT='fixtures'; python validate.py 2024
+python backtest.py ; python findings.py
+```
 
 `validate.py 2024` is exactly what CI runs on every push (see the badge above).
 
@@ -122,7 +128,7 @@ exporter shares is a good predictor of this year's. `backtest.py` tests exactly 
 2018–2024 series (treat year T-1's shares as the nowcast for T, score vs realised T):
 
 ```bash
-python backtest.py        # reads ../out/flows_YYYY.json; writes results/backtest.json
+python backtest.py        # reads ../out (or the committed fixtures/out); writes results/backtest.json
 ```
 
 Result over 192 material-years: **85% year-over-year top-exporter persistence**, share MAE 0.37pp across

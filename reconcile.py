@@ -73,9 +73,6 @@ tw['d2'] = (np.log(tw.x_fob) - np.log(tw.m_fob)) ** 2
 vc = smf.ols('d2 ~ C(i) + C(j) + 0', data=tw).fit()            # coefficients ~ reporter variances
 # recover per-country variance (average of its i-role and j-role coefficients), clip positive
 var = {}
-for k, v in vc.params.items():
-    iso = k.split('[T.')[-1].rstrip(']').replace('C(i)', '').replace('C(j)', '')
-    iso = iso.split('.')[-1] if '.' in iso else iso
 for role in ('i', 'j'):
     d = vc.params.filter(like=f'C({role})')
     for k, v in d.items():

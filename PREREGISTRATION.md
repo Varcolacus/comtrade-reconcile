@@ -28,7 +28,7 @@ P90 8.7pp). We commit to these thresholds for the 2025 comparison:
 
 | Metric (exporter side) | Pre-registered threshold | Basis |
 |---|---|---|
-| Top-1 exporter correct | **≥ 24 / 32** (~75%) | 85% persistence × reconciliation error; below 2024's 83% because 2025 uses *partial* Comtrade |
+| Top-1 exporter correct | **≥ 22 / 30** (~73%) | scored on the 30 validatable materials (gallium/germanium/hafnium share one HS6); below 2024's 25/30 because 2025 uses *partial* Comtrade |
 | Share MAE | **≤ 5.0 pp** | 2024 was 3.5pp; the P90 annual drift is 8.7pp, so a one-year-ahead MAE under 5pp is a real claim |
 | HHI correlation | **≥ 0.88** | 2024 was 0.92 |
 | Leader within ±8.7pp of truth | **≥ 90% of materials** | the backtest P90 band |
