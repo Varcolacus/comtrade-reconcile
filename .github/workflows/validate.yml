@@ -1,5 +1,9 @@
 name: validate
-on: [push, workflow_dispatch]
+on:
+  push:
+  workflow_dispatch:
+  schedule:
+    - cron: '0 6 1 * *'   # monthly keepalive: re-prove the pipeline reproduces + catch dependency drift
 jobs:
   validate:
     runs-on: ubuntu-latest
