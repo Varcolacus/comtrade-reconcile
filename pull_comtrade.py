@@ -11,7 +11,7 @@ YEARS = [int(y) for y in (sys.argv[1:] or ['2024'])]
 if not KEY:
     sys.exit('set COMTRADE_KEY')
 
-d = json.load(open(ROOT + r'\out\data.json', encoding='utf8'))
+d = json.load(open(os.path.join(ROOT, 'out', 'data.json'), encoding='utf8'))
 def hs6(m):
     t = m['title']
     if '(' in t and ')' in t:
@@ -36,7 +36,7 @@ def pull(year, code, flow):
     return None
 
 for year in YEARS:
-    path = ROOT + rf'\raw\comtrade\comtrade_{year}.csv'
+    path = os.path.join(ROOT, 'raw', 'comtrade', f'comtrade_{year}.csv')
     tot = 0; fails = []
     with open(path, 'w', newline='', encoding='utf8') as f:
         w = csv.writer(f); w.writerow(['year','reporter','partner','cmd','flow','value','netwgt','qty','qtyunit'])

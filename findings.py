@@ -20,7 +20,7 @@ SHARED_HS6 = {'gallium', 'germanium', 'hafnium'}  # one HS6 code 811292 — iden
 
 def root():
     here = os.path.dirname(os.path.abspath(__file__))
-    for d in [os.environ.get('FLOWS_DIR'), os.path.join('..', 'out'), 'out', os.path.join(here, '..', 'out')]:
+    for d in [os.environ.get('FLOWS_DIR'), os.path.join('..', 'out'), 'out', os.path.join(here, '..', 'out'), os.path.join(here, 'fixtures', 'out')]:
         if d and glob.glob(os.path.join(d, 'flows_20*.json')):
             return d
     raise SystemExit('No out/ found; set FLOWS_DIR.')

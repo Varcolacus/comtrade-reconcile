@@ -10,7 +10,7 @@ ROOT = os.environ.get('ATLAS_ROOT', '.')
 KEY = os.environ.get('COMTRADE_KEY', '')
 if not KEY: sys.exit('set COMTRADE_KEY')
 
-d = json.load(open(ROOT + r'\out\data.json', encoding='utf8'))
+d = json.load(open(os.path.join(ROOT, 'out', 'data.json'), encoding='utf8'))
 def hs6(m):
     t = m['title']; c = ''.join(ch for ch in t[t.find('(')+1:t.find(')')] if ch.isdigit()); return c[:6]
 codes = sorted({hs6(m) for m in d['materials']})
@@ -61,7 +61,7 @@ for cmd, labs in code2lab.items():
 
 # optional price overlay
 pink = {}
-pp = ROOT + r'\reconcile\pink_momentum.json'
+pp = os.path.join(ROOT, 'reconcile', 'pink_momentum.json')
 if os.path.exists(pp):
     pink = json.load(open(pp))
     for lab, pf in pink.items():
@@ -76,7 +76,7 @@ for lab in list(mom):
     mom[lab] = float(min(max(mom[lab], lo), hi))
 
 # build flows_2026 = flows_2025 * momentum
-F25 = json.load(open(ROOT + r'\out\flows_2025.json', encoding='utf8'))
+F25 = json.load(open(os.path.join(ROOT, 'out', 'flows_2025.json'), encoding='utf8'))
 materials = {}; used = set()
 for lab, flows in F25['materials'].items():
     f = mom.get(lab, 1.0)
@@ -86,7 +86,7 @@ for lab, flows in F25['materials'].items():
 out = {'year': 2026, 'provisional': True, 'nowcast_kind': 'directional-q1',
        'source': 'DIRECTIONAL 2026 NOWCAST — 2025 reconciled structure scaled by reporter-matched Q1-2026 vs Q1-2025 export momentum' + (' + Pink Sheet prices' if pink else '') + '. Shares = 2025; levels indicative only.',
        'centroids': F25['centroids'], 'names': F25['names'], 'iso': F25['iso'], 'materials': materials}
-json.dump(out, open(ROOT + r'\out\flows_2026.json', 'w', encoding='utf8'), separators=(',', ':'), ensure_ascii=False)
+json.dump(out, open(os.path.join(ROOT, 'out', 'flows_2026.json'), 'w', encoding='utf8'), separators=(',', ':'), ensure_ascii=False)
 print('\nfinal 2026 momentum factors (Q1 trade + Pink Sheet price, clamped):')
 for lab, f in sorted(mom.items(), key=lambda x: -x[1]):
     print(f'  {lab:22s} x{f:.2f}  [{"price+trade" if lab in pink else "trade/persistence"}]')

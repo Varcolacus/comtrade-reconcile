@@ -18,17 +18,17 @@ ROOT = os.environ.get('ATLAS_ROOT', '.')
 YEAR = int(sys.argv[1]) if len(sys.argv) > 1 else 2024
 
 # ---- country crosswalk: Comtrade M49 -> ISO3 (BACI table) ----
-cc = pd.read_csv(ROOT + r'\raw\baci\country_codes_V202601.csv')
+cc = pd.read_csv(os.path.join(ROOT, 'raw', 'baci', 'country_codes_V202601.csv'))
 m49_iso3 = dict(zip(cc.country_code, cc.country_iso3))
 
 # ---- geography (CEPII dist_cepii) ----
-geo = pd.read_excel(ROOT + r'\raw\geodist\dist_cepii.xls')[['iso_o', 'iso_d', 'dist', 'distw', 'contig']]
+geo = pd.read_excel(os.path.join(ROOT, 'raw', 'geodist', 'dist_cepii.xls'))[['iso_o', 'iso_d', 'dist', 'distw', 'contig']]
 geo['distw'] = geo['distw'].fillna(geo['dist'])
 LANDLOCKED = set(('AFG ARM AZE BDI BFA BOL BWA CAF TCD ETH KAZ KGZ LAO LSO MWI MLI MDA MNG NPL NER PRY '
                   'RWA SSD SWZ TJK MKD TKM UGA UZB ZMB ZWE AND AUT BLR BTN HUN LIE LUX SMR SRB SVK CHE XKX').split())
 
 # ---- raw Comtrade ----
-df = pd.read_csv(ROOT + rf'\raw\comtrade\comtrade_{YEAR}.csv')
+df = pd.read_csv(os.path.join(ROOT, 'raw', 'comtrade', f'comtrade_{YEAR}.csv'))
 df = df[(df.value > 0) & (df.reporter != 0) & (df.partner != 0)]
 df = df[df.reporter.isin(m49_iso3) & df.partner.isin(m49_iso3)]
 df['r3'] = df.reporter.map(m49_iso3); df['p3'] = df.partner.map(m49_iso3)
@@ -98,5 +98,5 @@ def recon(r):
 both['value'] = both.apply(recon, axis=1)
 out = both.dropna(subset=['value'])[['i', 'j', 'cmd', 'value']].copy()
 out = out[out.value > 0]
-out.to_csv(ROOT + rf'\reconcile\recon_{YEAR}.csv', index=False)
+out.to_csv(os.path.join(ROOT, 'reconcile', f'recon_{YEAR}.csv'), index=False)
 print(f'RECONCILED {YEAR}: {len(out)} flows, total ${out.value.sum()/1e9:.1f}B -> reconcile/recon_{YEAR}.csv', flush=True)

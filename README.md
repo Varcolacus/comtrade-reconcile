@@ -10,6 +10,10 @@ for the years BACI hasn't released yet.**
 > "the level offset", diagnosed). It is Comtrade-mirror reconciliation in BACI's spirit, not a bit-for-bit
 > BACI replica.
 
+📄 **Technical note** (method, validation, nowcast, pre-registration, and the origin-gap finding in one
+self-contained document): [HTML](https://varcolacus.github.io/critical-materials-atlas/technical-note.html)
+· [PDF](https://varcolacus.github.io/critical-materials-atlas/technical-note.pdf).
+
 CEPII's [BACI](http://www.cepii.fr/CEPII/en/bdd_modele/bdd_modele_item.asp?id=37) is the standard
 "clean" bilateral trade dataset, but it lags ~1.5 years. This is a small, self-contained pipeline that
 reconstructs the same thing from **raw UN Comtrade** — matching the two mirror reports of every flow,
@@ -85,7 +89,23 @@ calibrated back to BACI's scale per material; shares are untouched.)
   is carried forward and scaled per material by reporter-matched Q1 export momentum blended with the
   World Bank Pink Sheet price change. Shares stay at 2025; only levels tilt. Directional, not bilateral.
 
-## Run
+## Quick start — reproduce, no key, from committed fixtures
+
+Everything below runs on a fresh clone with **no API key and no large downloads** — the inputs are
+committed under [`fixtures/`](fixtures/) (a slice of BACI 2024 + the reconciled flows 2018–2024). Pure
+Python; cross-platform (paths are `os.path.join`, tested on Linux CI and Windows).
+
+```bash
+pip install -r requirements.txt
+ATLAS_ROOT=fixtures python validate.py 2024   # reconciliation vs official BACI 2024 (the validation table)
+python backtest.py                            # out-of-sample persistence bands (reads fixtures/out)
+python findings.py                            # the origin-gap finding → results/findings.json
+```
+
+`validate.py 2024` is exactly what CI runs on every push (see the badge above).
+
+## Full pipeline (needs a Comtrade key + the atlas data tree)
+
 ```bash
 export ATLAS_ROOT=/path/to/critical-materials-atlas   # provides out/data.json, raw/baci/country_codes…
 COMTRADE_KEY=<key> python pull_comtrade.py 2024        # raw bilateral pull (one call per code×flow)

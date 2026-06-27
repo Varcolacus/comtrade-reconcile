@@ -29,7 +29,8 @@ def find_flows_dir():
     here = os.path.dirname(os.path.abspath(__file__))
     cands = [os.environ.get('FLOWS_DIR'),
              os.path.join('..', 'out'), 'out',
-             os.path.join(here, '..', 'out')]
+             os.path.join(here, '..', 'out'),
+             os.path.join(here, 'fixtures', 'out')]   # standalone-clone fallback
     for d in cands:
         if d and glob.glob(os.path.join(d, 'flows_20*.json')):
             return d
