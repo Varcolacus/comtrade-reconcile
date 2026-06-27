@@ -1,8 +1,8 @@
 """Heavy BACI-style reconciliation of raw UN Comtrade into a single bilateral value per flow.
 Faithful to Gaulier & Zignago (2010):
   1. match the two mirror reports of each flow (exporter FOB, importer CIF);
-  2. estimate CIF/FOB markups by a gravity regression (distance, landlocked, contiguity, unit value,
-     product) and deflate every CIF import to an FOB basis;
+  2. deflate every CIF import to an FOB basis by a robust per-product median markup (a gravity
+     regression is unidentified on this ~31-product slice — see the inline note in step 2);
   3. estimate each reporter's reliability from a variance-components decomposition of the mirror
      discrepancy (E[d^2] = var_i + var_j), giving inverse-variance weights;
   4. reconcile two-sided flows by inverse-variance averaging on logs; keep one-sided flows
@@ -21,14 +21,22 @@ YEAR = int(sys.argv[1]) if len(sys.argv) > 1 else 2024
 cc = pd.read_csv(os.path.join(ROOT, 'raw', 'baci', 'country_codes_V202601.csv'))
 m49_iso3 = dict(zip(cc.country_code, cc.country_iso3))
 
-# ---- geography (CEPII dist_cepii) ----
-geo = pd.read_excel(os.path.join(ROOT, 'raw', 'geodist', 'dist_cepii.xls'))[['iso_o', 'iso_d', 'dist', 'distw', 'contig']]
-geo['distw'] = geo['distw'].fillna(geo['dist'])
+# ---- geography (CEPII dist_cepii) — OPTIONAL: kept for diagnostics only; the CIF/FOB markup below uses
+# a per-product median, so dist/contig are not consumed. Skipped if the file is absent (e.g. in CI). ----
+geo_path = os.path.join(ROOT, 'raw', 'geodist', 'dist_cepii.xls')
+if os.path.exists(geo_path):
+    geo = pd.read_excel(geo_path)[['iso_o', 'iso_d', 'dist', 'distw', 'contig']]
+    geo['distw'] = geo['distw'].fillna(geo['dist'])
+else:
+    geo = pd.DataFrame(columns=['iso_o', 'iso_d', 'dist', 'distw', 'contig'])
 LANDLOCKED = set(('AFG ARM AZE BDI BFA BOL BWA CAF TCD ETH KAZ KGZ LAO LSO MWI MLI MDA MNG NPL NER PRY '
                   'RWA SSD SWZ TJK MKD TKM UGA UZB ZMB ZWE AND AUT BLR BTN HUN LIE LUX SMR SRB SVK CHE XKX').split())
 
-# ---- raw Comtrade ----
-df = pd.read_csv(os.path.join(ROOT, 'raw', 'comtrade', f'comtrade_{YEAR}.csv'))
+# ---- raw Comtrade (accepts a gzipped fixture: comtrade_<year>.csv or .csv.gz) ----
+cpath = os.path.join(ROOT, 'raw', 'comtrade', f'comtrade_{YEAR}.csv')
+if not os.path.exists(cpath) and os.path.exists(cpath + '.gz'):
+    cpath += '.gz'
+df = pd.read_csv(cpath)
 df = df[(df.value > 0) & (df.reporter != 0) & (df.partner != 0)]
 df = df[df.reporter.isin(m49_iso3) & df.partner.isin(m49_iso3)]
 df['r3'] = df.reporter.map(m49_iso3); df['p3'] = df.partner.map(m49_iso3)

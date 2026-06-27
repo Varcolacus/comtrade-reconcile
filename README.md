@@ -89,28 +89,33 @@ calibrated back to BACI's scale per material; shares are untouched.)
   is carried forward and scaled per material by reporter-matched Q1 export momentum blended with the
   World Bank Pink Sheet price change. Shares stay at 2025; only levels tilt. Directional, not bilateral.
 
-## Quick start — reproduce, no key, from committed fixtures
+## Quick start — reproduce end-to-end, no key
 
-Everything below runs on a fresh clone with **no API key and no large downloads** — the inputs are
-committed under [`fixtures/`](fixtures/) (a slice of BACI 2024 + the reconciled flows 2018–2024). Pure
-Python; cross-platform (paths are `os.path.join`, tested on Linux CI and Windows).
+Runs on a fresh clone with **no API key**. The raw UN Comtrade for 2024 is committed (gzipped, columns
+trimmed — ~0.9 MB) under [`fixtures/raw/`](fixtures/raw/), so the reconciliation **regenerates from raw**
+and is then scored against official BACI — only the initial network pull (`pull_comtrade.py`) needs a key.
+Pure Python; cross-platform (paths are `os.path.join`, run on Linux CI and Windows).
 
 ```bash
 pip install -r requirements.txt
-ATLAS_ROOT=fixtures python validate.py 2024   # reconciliation vs official BACI 2024 (the validation table)
-python backtest.py                            # out-of-sample persistence bands (reads fixtures/out)
-python findings.py                            # the origin-gap finding → results/findings.json
+ATLAS_ROOT=fixtures python reconcile.py 2024   # raw Comtrade fixture -> recon_2024.csv (the engine itself)
+ATLAS_ROOT=fixtures python validate.py 2024    # the regenerated recon vs official BACI 2024
+python backtest.py                             # out-of-sample persistence bands
+python findings.py                             # the origin-gap finding -> results/findings.json
 ```
 On **Windows PowerShell** set the env var separately:
 ```powershell
 pip install -r requirements.txt
-$env:ATLAS_ROOT='fixtures'; python validate.py 2024
+$env:ATLAS_ROOT='fixtures'
+python reconcile.py 2024 ; python validate.py 2024
 python backtest.py ; python findings.py
 ```
 
-`validate.py 2024` is exactly what CI runs on every push (see the badge above).
+The `reconcile.py → validate.py` chain above is **exactly what CI runs on every push** (badge above) —
+so the green badge now proves the code *regenerates* the reconciliation from raw and that it matches BACI,
+not merely that a pre-committed file does.
 
-## Full pipeline (needs a Comtrade key + the atlas data tree)
+## Refresh from live Comtrade (needs a key + the atlas data tree)
 
 ```bash
 export ATLAS_ROOT=/path/to/critical-materials-atlas   # provides out/data.json, raw/baci/country_codes…
